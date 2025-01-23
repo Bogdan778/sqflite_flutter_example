@@ -8,6 +8,8 @@ abstract interface class DatabaseManager {
 
   Future<List<Map<String, Object?>>> retrieve(String table);
 
+  Future<dynamic> rawQuery(String query, [List<dynamic>? arguments]);
+
   Future<void> closeDb();
 
   Future<void> update(
@@ -63,4 +65,12 @@ class DatabaseManagerImpl implements DatabaseManager {
 
   @override
   Future<void> closeDb() => database.close();
+
+  @override
+  Future rawQuery(String query, [List<dynamic>? arguments]) {
+    return database.rawQuery(
+      query,
+      arguments,
+    );
+  }
 }

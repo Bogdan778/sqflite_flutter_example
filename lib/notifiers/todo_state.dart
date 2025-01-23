@@ -25,12 +25,22 @@ class TodoState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> retrieveSpecificTodo(String id) async {
+    final updatedTodo = await _todoRepository.retrieveSpecificTodo(id);
+    final index = _todos.indexWhere((e) => e.id == id);
+
+    _todos.insert(index, updatedTodo);
+    _todos.removeAt(index + 1);
+
+    notifyListeners();
+  }
+
   Future<void> toggleTodoStatus(bool value, String id) async {
     final todo = _todos.firstWhere((todo) => todo.id == id);
     await _todoRepository.update(todo.copyWith(isDone: value));
 
     notifyListeners();
-    retrieveTodos();
+    retrieveSpecificTodo(id);
   }
 
   Future<void> deleteTodo(String id) async {

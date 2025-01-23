@@ -6,6 +6,8 @@ abstract interface class TodoRepository {
 
   Future<List<Todo>> retrieve();
 
+  Future<Todo> retrieveSpecificTodo(String id);
+
   Future<void> update(Todo todo);
 
   Future<void> delete(String id);
@@ -37,4 +39,14 @@ class TodoRepositoryImpl implements TodoRepository {
         _table,
         todo.toMap(),
       );
+
+  @override
+  Future<Todo> retrieveSpecificTodo(String id) async {
+    final todo = await _databaseManager.rawQuery(
+      'SELECT * FROM "todo" WHERE id = ?',
+      [id],
+    );
+
+    return Todo.fromMap(todo.first);
+  }
 }
